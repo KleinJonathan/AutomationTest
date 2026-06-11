@@ -30,6 +30,8 @@ public class MathClass {
     public int subBA() {
         return b-a;
     }
-
+    public int divAB() {
+        return a/b;
+    }
 
 }

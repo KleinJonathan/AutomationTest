@@ -46,6 +46,14 @@ public class TestMath {
         MathClass m = new MathClass();
         m.setA(12);
         m.setB(4);
-        assertEquals(47, m.multAB());
+        assertEquals(48, m.multAB());
+    }
+
+    @Test
+    public void math_divZero(){
+        MathClass m = new MathClass();
+        m.setA(12);
+        m.setB(0);
+        assertThrows(ArithmeticException.class, m::divAB);
     }
 }
