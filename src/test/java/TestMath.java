@@ -32,4 +32,12 @@ public class TestMath {
         m.setB(2);
         assertEquals(24, m.multAB());
     }
+
+    @Test
+    public void math_multiply2(){
+        MathClass m = new MathClass();
+        m.setA(12);
+        m.setB(3);
+        assertEquals(36, m.multAB());
+    }
 }
