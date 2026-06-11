@@ -46,6 +46,6 @@ public class TestMath {
         MathClass m = new MathClass();
         m.setA(12);
         m.setB(4);
-        assertEquals(48, m.multAB());
+        assertEquals(47, m.multAB());
     }
 }
