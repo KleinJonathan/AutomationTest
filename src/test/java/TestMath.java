@@ -40,4 +40,12 @@ public class TestMath {
         m.setB(3);
         assertEquals(36, m.multAB());
     }
+
+    @Test
+    public void math_multiply3(){
+        MathClass m = new MathClass();
+        m.setA(12);
+        m.setB(4);
+        assertEquals(48, m.multAB());
+    }
 }
