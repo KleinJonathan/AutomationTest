@@ -26,5 +26,11 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Make Grade executable
         run: chmod +x ./gradlew
-      - name: Test with Gradle
+      - name: Apply Spotless
         run: ./gradlew spotlessApply
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Apply Spotless formatting"
+          skip_fetch: false
+          skip_checkout: false
