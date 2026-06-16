@@ -1,13 +1,20 @@
-name: Build
+name: Apply Spotless
 on:
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - '**'
 
 jobs:
-  build:
-    name: Build Project
+  apply_spotless:
+    name: Apply Spotless
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v6
@@ -19,5 +26,5 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
       - name: Make Grade executable
         run: chmod +x ./gradlew
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Test with Gradle
+        run: ./gradlew spotlessApply
