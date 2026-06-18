@@ -5,6 +5,6 @@ on:
 
 jobs:
   call-reusable-workflow:
-    uses: ./.github/workflows/spotless_check.yml
+    uses: ./.github/workflows/reusable_spotless_check.yml
     permissions:
       contents: read
