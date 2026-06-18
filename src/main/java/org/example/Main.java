@@ -12,5 +12,6 @@ public class Main {
     System.out.println(m.getA());
     System.out.println(m.getA());
     System.out.println(m.getA());
+    System.out.println(m.getA());
   }
 }
