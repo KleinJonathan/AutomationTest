@@ -26,10 +26,6 @@ jobs:
         run: ./gradlew test
 
       # https://github.com/marketplace/actions
-      - name: Run Tests + Coverage
-        run: |
-          chmod +x gradlew
-          ./gradlew test
       - name: Add coverage to PR
         uses: madrapps/jacoco-report@v1.8.0
         with:
