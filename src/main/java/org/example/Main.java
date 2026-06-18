@@ -10,5 +10,6 @@ public class Main {
     m.setA(12);
     System.out.println(m.getA());
     System.out.println(m.getA());
+    System.out.println(m.getA());
   }
 }
