@@ -43,9 +43,11 @@ jacocoTestReport {
 
 pmd {
     consoleOutput = true
-    ignoreFailures = true
     toolVersion = "7.16.0"
     rulesMinimumPriority = 5
     ruleSets = ["category/java/errorprone.xml", "category/java/bestpractices.xml"]
     threads = 4
+
+    // Wenn die Github Action auf pmd reagieren soll z.b. failen dann auf false setzen
+    ignoreFailures = true
 }
