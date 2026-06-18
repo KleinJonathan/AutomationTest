@@ -1,16 +1,14 @@
-name: Test
+name: Test with Code coverage
 on:
   pull_request:
-    branches:
-      - master
-  push:
-    branches:
-      - '**'
 
 jobs:
   test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v6
@@ -24,3 +22,12 @@ jobs:
         run: chmod +x ./gradlew
       - name: Test with Gradle
         run: ./gradlew test
+
+      # https://github.com/marketplace/actions
+      - name: Add coverage to PR
+        uses: madrapps/jacoco-report@v1.8.0
+        with:
+          paths: ${{ github.workspace }}/**/build/reports/jacoco/test/jacocoTestReport.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 3
+          min-coverage-changed-lines: 5
