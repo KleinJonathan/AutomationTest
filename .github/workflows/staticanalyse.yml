@@ -1,4 +1,4 @@
-name: staticanalyse.yml
+name: Static Analysis
 on:
   pull_request:
   push:
