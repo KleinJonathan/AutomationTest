@@ -10,6 +10,6 @@ jobs:
     permissions:
       contents: read
   check_pmd:
-    uses: ./.github/workflows/reusable_spotless_check.yml
+    uses: ./.github/workflows/reusable_pmd.yml
     permissions:
       contents: read
