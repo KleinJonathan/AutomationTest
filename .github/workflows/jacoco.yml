@@ -1,4 +1,4 @@
-name: Code coverage Tests
+name: Test with Code coverage
 
 on:
   pull_request:
@@ -16,18 +16,16 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
-      - name: Run Coverage
+
+      - name: Run Tests + Coverage
         run: |
           chmod +x gradlew
-          ./gradlew testCoverage
+          ./gradlew test
 
       - name: Add coverage to PR
-        id: jacoco
         uses: madrapps/jacoco-report@v1.8.0
         with:
-          paths: |
-            ${{ github.workspace }}/**/build/reports/jacoco/prodNormalDebugCoverage/prodNormalDebugCoverage.xml,
-            ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+          paths: ${{ github.workspace }}/**/build/reports/jacoco/test/jacocoTestReport.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 3
           min-coverage-changed-lines: 5
