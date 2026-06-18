@@ -2,9 +2,10 @@ name: Static Analysis
 on:
   pull_request:
   push:
+  workflow_call:
 
 jobs:
   call-reusable-workflow:
-    uses: ./.github/workflows/reusable/spotless_check.yml
+    uses: ./.github/workflows/reusable_spotless_check.yml
     permissions:
       contents: read
