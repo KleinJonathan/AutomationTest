@@ -1,4 +1,4 @@
-name: reusable_pmd.yml
+name: Check PMD
 on:
   workflow_call:
 
