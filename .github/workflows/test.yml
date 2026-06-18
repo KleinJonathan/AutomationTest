@@ -23,6 +23,14 @@ jobs:
       - name: Test with Gradle
         run: ./gradlew test
 
+      - name: Upload JaCoCo Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-report
+          path: build/reports/jacoco/
+          retention-days: 7
+
       # https://github.com/marketplace/actions
       - name: Add coverage to PR
         uses: madrapps/jacoco-report@v1.8.0

@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'com.diffplug.spotless' version "8.4.0"
     id 'jacoco'
+    id 'pmd'
 }
 
 group = 'org.example'
@@ -38,4 +39,15 @@ jacocoTestReport {
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
     }
+}
+
+pmd {
+    consoleOutput = true
+    toolVersion = "7.16.0"
+    rulesMinimumPriority = 5
+    ruleSets = ["category/java/errorprone.xml", "category/java/bestpractices.xml"]
+    threads = 4
+
+    // Wenn die Github Action auf pmd reagieren soll z.b. failen dann auf false setzen
+    ignoreFailures = true
 }

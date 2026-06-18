@@ -5,7 +5,11 @@ on:
   workflow_call:
 
 jobs:
-  call-reusable-workflow:
+  check_spotless:
     uses: ./.github/workflows/reusable_spotless_check.yml
+    permissions:
+      contents: read
+  check_pmd:
+    uses: ./.github/workflows/reusable_pmd.yml
     permissions:
       contents: read
