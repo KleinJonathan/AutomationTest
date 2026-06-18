@@ -1,0 +1,11 @@
+name: staticanalyse.yml
+on:
+  pull_request:
+  push:
+
+jobs:
+  call-reusable-workflow:
+    uses: ./.github/workflows/spotless.yml
+    permissions:
+      contents: write
+      pull-requests: write

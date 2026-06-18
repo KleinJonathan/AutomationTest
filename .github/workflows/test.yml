@@ -1,4 +1,4 @@
-name: Test
+name: Test with Code coverage
 on:
   pull_request:
     branches:
@@ -24,3 +24,16 @@ jobs:
         run: chmod +x ./gradlew
       - name: Test with Gradle
         run: ./gradlew test
+
+      # https://github.com/marketplace/actions
+      - name: Run Tests + Coverage
+        run: |
+          chmod +x gradlew
+          ./gradlew test
+      - name: Add coverage to PR
+        uses: madrapps/jacoco-report@v1.8.0
+        with:
+          paths: ${{ github.workspace }}/**/bu
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 3
+          min-coverage-changed-lines: 5
