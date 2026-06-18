@@ -1,6 +1,6 @@
 name: Apply Spotless
 on:
-  workflow_call:
+  pull_request:
 
 jobs:
   apply_spotless:
