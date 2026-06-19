@@ -15,5 +15,5 @@ jobs:
       contents: read
   call-designite:
     uses: ./.github/workflows/reusable_designite_java.yml
-    secrets:
-      PAT: ${{ secrets.PAT }}
+    permissions:
+      contents: read

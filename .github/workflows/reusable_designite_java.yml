@@ -2,20 +2,30 @@ name: DesigniteJava code quality
 
 on:
   workflow_call:
-    secrets:
-      PAT:
-        required: true
 
 jobs:
-  build:
+  DesigniteJava:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '25'
-      - name: DesigniteJava_action
-        uses: DesigniteTools/DJAction@v2.0.0
+      - name: Download DesigniteJava
+        run: wget -q "https://www.designite-tools.com/assets/DesigniteJava.jar"
+        # DesigniteJava runterladen, um bei jedem commit den gesammten source code zu analysieren
+        # Die Action analysiert immer nur den aktuell geänderten Code
+      - name: Analyze full source with DesigniteJava
+        run: java -jar DesigniteJava.jar -i src -o designite-output
+      - name: Upload Designite results
+        uses: actions/upload-artifact@v4
+        if: always()
         with:
-          PAT: ${{ secrets.PAT }}
+          name: designite-output
+          path: designite-output
+          retention-days: 7
