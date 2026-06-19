@@ -2,6 +2,12 @@ name: DesigniteJava code quality
 
 on:
   workflow_call:
+    inputs:
+      max_smells:
+        description: "Build faellt, wenn die Gesamtzahl der Smells > diesem Wert ist. -1 = nie fehlschlagen."
+        type: number
+        default: -1
+        required: false
 
 jobs:
   DesigniteJava:
@@ -18,14 +24,20 @@ jobs:
           java-version: '25'
       - name: Download DesigniteJava
         run: wget -q "https://www.designite-tools.com/assets/DesigniteJava.jar"
-        # DesigniteJava runterladen, um bei jedem commit den gesammten source code zu analysieren
-        # Die Action analysiert immer nur den aktuell geänderten Code
+      # -i analysiert den GESAMTEN Quellordner (nicht nur den Commit-Diff wie -ci).
+      # Pfad muss absolut sein, sonst NullPointerException (getParentFile()).
       - name: Analyze full source with DesigniteJava
-        run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE/src" -o designite-output
-      - name: Upload Designite results
+        run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE/src" -o build/reports/designite-report
+      # Rendert die CSVs als Step Summary und wertet das Quality Gate aus (Exit 1).
+      - name: Report & Quality Gate
+        if: always()
+        env:
+          MAX_SMELLS: ${{ inputs.max_smells }}
+        run: python3 .github/scripts/designite_report.py build/reports/designite-report
+      - name: Upload Designite Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: designite-output
-          path: designite-output
+          name: designite-report
+          path: build/reports/designite-report
           retention-days: 7
