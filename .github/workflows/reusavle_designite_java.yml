@@ -1,0 +1,13 @@
+name: DesigniteJava code quality
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: DesigniteJava_action
+        uses: DesigniteTools/DJAction@v2.0.0
+        with:
+          PAT: ${{ secrets.PAT }}

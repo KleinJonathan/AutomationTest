@@ -13,3 +13,7 @@ jobs:
     uses: ./.github/workflows/reusable_pmd.yml
     permissions:
       contents: read
+  call-designite:
+    uses: ./.github/workflows/reusavle_designite_java.yml
+    secrets:
+      PAT: ${{ secrets.PAT }}
