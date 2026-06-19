@@ -21,7 +21,7 @@ jobs:
         # DesigniteJava runterladen, um bei jedem commit den gesammten source code zu analysieren
         # Die Action analysiert immer nur den aktuell geänderten Code
       - name: Analyze full source with DesigniteJava
-        run: java -jar DesigniteJava.jar -i src -o designite-output
+        run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE/src" -o designite-output
       - name: Upload Designite results
         uses: actions/upload-artifact@v4
         if: always()
