@@ -3,14 +3,21 @@
 optionales Quality Gate aus (Exit 1 bei Ueberschreitung).
 
 Aufruf:  designite_report.py <designite-output-ordner>
-Env:     MAX_SMELLS  -> Build faellt, wenn Gesamtzahl der Smells > Wert. -1 = nie.
+
+Env (alle optional, -1/ungesetzt = wird nicht geprueft):
+  MAX_SMELLS         -> Grenze fuer die Gesamtzahl aller Smells
+  MAX_ARCHITECTURE   -> Grenze fuer Architecture Smells
+  MAX_DESIGN         -> Grenze fuer Design Smells
+  MAX_IMPLEMENTATION -> Grenze fuer Implementation Smells
+  MAX_TESTABILITY    -> Grenze fuer Testability Smells
+  MAX_TEST           -> Grenze fuer Test Smells
 """
 import csv
 import os
 import sys
 from collections import Counter, defaultdict
 
-# Smell-CSV -> (Kategorie-Anzeigename)
+# Smell-CSV -> Kategorie-Anzeigename
 SMELL_FILES = {
     "ArchitectureSmells.csv": "Architecture Smells",
     "DesignSmells.csv": "Design Smells",
@@ -19,7 +26,27 @@ SMELL_FILES = {
     "TestSmells.csv": "Test Smells",
 }
 
+# Kategorie -> Env-Variable fuer die optionale Grenze
+CATEGORY_ENV = {
+    "Architecture Smells": "MAX_ARCHITECTURE",
+    "Design Smells": "MAX_DESIGN",
+    "Implementation Smells": "MAX_IMPLEMENTATION",
+    "Testability Smells": "MAX_TESTABILITY",
+    "Test Smells": "MAX_TEST",
+}
+
 MAX_DETAIL_ROWS = 50  # pro Smell-Typ, damit die Summary nicht ausufert
+
+
+def int_env(name):
+    """Liest eine Env-Grenze; ungesetzt/leer -> -1 (= nicht pruefen)."""
+    raw = os.environ.get(name, "").strip()
+    if raw == "":
+        return -1
+    try:
+        return int(raw)
+    except ValueError:
+        return -1
 
 
 def location(row):
@@ -34,7 +61,6 @@ def location(row):
 
 def main(out_dir):
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
-    max_smells = int(os.environ.get("MAX_SMELLS", "-1"))
 
     category_counts = Counter()          # Kategorie -> Anzahl
     smell_counts = Counter()             # (Kategorie, Smell) -> Anzahl
@@ -56,6 +82,17 @@ def main(out_dir):
                 where, loc = location(row)
                 details[(label, smell)].append((where, loc, row.get("Description", "")))
 
+    # --- Quality Gate auswerten ---
+    gates = []  # (Name, Anzahl, Grenze)
+    if int_env("MAX_SMELLS") >= 0:
+        gates.append(("Gesamt", total, int_env("MAX_SMELLS")))
+    for label in SMELL_FILES.values():
+        limit = int_env(CATEGORY_ENV[label])
+        if limit >= 0:
+            gates.append((label, category_counts.get(label, 0), limit))
+    failed = [(n, c, lim) for (n, c, lim) in gates if c > lim]
+
+    # --- Report bauen ---
     lines = ["# 🔍 DesigniteJava Report", ""]
     if total == 0:
         lines.append("✅ Keine Code Smells gefunden.")
@@ -69,6 +106,17 @@ def main(out_dir):
                 lines.append(f"| {label} | {category_counts[label]} |")
         lines.append("")
 
+    if gates:
+        lines.append("## 🚦 Quality Gate")
+        lines.append("")
+        lines.append("| Grenze | Anzahl | Limit | Status |")
+        lines.append("|---|---|---|---|")
+        for name, count, limit in gates:
+            status = "❌ Fail" if count > limit else "✅ Pass"
+            lines.append(f"| {name} | {count} | {limit} | {status} |")
+        lines.append("")
+
+    if total > 0:
         for label in SMELL_FILES.values():
             cat_smells = {s: n for (l, s), n in smell_counts.items() if l == label}
             if not cat_smells:
@@ -92,12 +140,13 @@ def main(out_dir):
             fh.write(report + "\n")
     print(report)
 
-    # Quality Gate
-    if max_smells >= 0 and total > max_smells:
-        print(f"::error::Quality Gate failed: {total} Smells > erlaubtes Maximum {max_smells}")
+    # --- Exit-Status ---
+    if failed:
+        for name, count, limit in failed:
+            print(f"::error::Quality Gate '{name}': {count} Smells > erlaubtes Maximum {limit}")
         return 1
-    if max_smells >= 0:
-        print(f"::notice::Quality Gate passed: {total} Smells <= {max_smells}")
+    if gates:
+        print(f"::notice::Quality Gate bestanden ({len(gates)} Grenze(n) geprueft).")
     return 0
 
 
