@@ -2,6 +2,9 @@ name: DesigniteJava code quality
 
 on:
   workflow_call:
+    secrets:
+      PAT:
+        required: true
 
 jobs:
   build:
