@@ -18,6 +18,7 @@ public class Invoice {
 class Customer {
     private CustomerOrder order;
     public CustomerOrder getOrder() { return order; }
+    public void setOrder(CustomerOrder order) { this.order = order; }
 }
 
 class CustomerOrder {
@@ -32,4 +33,10 @@ class CustomerOrder {
     public double getDiscount() { return discount; }
     public String getStatus() { return status; }
     public double getMultiplier() { return multiplier; }
+
+    public void setPrice(double price) { this.price = price; }
+    public void setTax(double tax) { this.tax = tax; }
+    public void setDiscount(double discount) { this.discount = discount; }
+    public void setStatus(String status) { this.status = status; }
+    public void setMultiplier(double multiplier) { this.multiplier = multiplier; }
 }

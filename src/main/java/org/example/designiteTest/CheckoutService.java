@@ -26,6 +26,11 @@ class User {
     public boolean isBanned() { return banned; }
     public double getCreditLimit() { return creditLimit; }
     public String getAddress() { return address; }
+
+    public void setActive(boolean active) { this.active = active; }
+    public void setBanned(boolean banned) { this.banned = banned; }
+    public void setCreditLimit(double creditLimit) { this.creditLimit = creditLimit; }
+    public void setAddress(String address) { this.address = address; }
 }
 
 class Cart {
@@ -34,4 +39,6 @@ class Cart {
 
     public java.util.List<String> getItems() { return items; }
     public double getTotal() { return total; }
+
+    public void setTotal(double total) { this.total = total; }
 }
