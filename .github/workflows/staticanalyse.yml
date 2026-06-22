@@ -24,3 +24,7 @@ jobs:
     uses: ./.github/workflows/reusable_typos.yml
     permissions:
       contents: read
+  security_scan:
+    uses: ./.github/workflows/security_scan.yml
+    permissions:
+      contents: read
