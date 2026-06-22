@@ -56,12 +56,7 @@ jobs:
       # -i analysiert den GESAMTEN Quellordner (nicht nur den Commit-Diff wie -ci).
       # Pfad muss absolut sein, sonst NullPointerException (getParentFile()).
       - name: Analyze full source with DesigniteJava
-        run: |
-          if [[ -z "${{ secrets.D_KEY }}" ]]; then
-            java -jar DesigniteJava.jar -ci -repo "$GITHUB_REPOSITORY" -pat "${{ secrets.PAT }}" -o build/reports/designite-report -g
-          else
-            java -jar DesigniteJava.jar -ci -repo "$GITHUB_REPOSITORY" -pat "${{ secrets.PAT }}" -k "${{ secrets.D_KEY }}" -o build/reports/designite-report -g
-          fi
+        run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE/src" -o build/reports/designite-report
       # Rendert die CSVs als Step Summary und wertet das Quality Gate aus (Exit 1).
       - name: Report & Quality Gate
         if: always()
