@@ -1,7 +1,7 @@
 name: Security Scan
 on:
   schedule:
-    - cron: "* 2 * * *" # Täglich um 2 Uhr morgens
+    - cron: "5 * * * * *" # Alle 5 Minuten
 
 jobs:
   Dependency-Check:
