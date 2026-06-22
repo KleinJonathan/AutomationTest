@@ -18,3 +18,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
+  check_spell:
+    uses: ./.github/workflows/reusable_typos.yml
+    permissions:
+      contents: read
