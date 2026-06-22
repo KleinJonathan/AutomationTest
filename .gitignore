@@ -17,6 +17,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+# Designite
+./.config
+Designite**
+
 ### Eclipse ###
 .apt_generated
 .classpath
