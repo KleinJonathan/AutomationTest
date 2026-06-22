@@ -1,7 +1,7 @@
 name: Security Scan
 on:
   schedule:
-    - cron: "5 * * * *" # Alle 5 Minuten
+    - cron: "* 2 * * *" # Täglich um 2 Uhr morgens
   workflow_call:
 
 jobs:
@@ -25,6 +25,8 @@ jobs:
 
       - name: Dependency-Check
         uses: dependency-check/Dependency-Check_Action@main
+        env:
+          JAVA_HOME: /opt/jdk
         with:
           project: 'test'
           path: '.'
