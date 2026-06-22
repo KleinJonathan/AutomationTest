@@ -2,6 +2,7 @@ name: Security Scan
 on:
   schedule:
     - cron: "* 2 * * *" # Täglich um 2 Uhr morgens
+    
   workflow_call:
 
 jobs:
@@ -23,20 +24,15 @@ jobs:
       - name: Build Project
         run: ./gradlew clean build
 
+      # OWASP-Gradle-Plugin: liest den echten Dependency-Graphen, kein Kopieren noetig.
+      # Schwellwert (failBuildOnCVSS = 7) ist in build.gradle konfiguriert.
       - name: Dependency-Check
-        uses: dependency-check/Dependency-Check_Action@main
         env:
-          JAVA_HOME: /opt/jdk
-        with:
-          project: 'test'
-          path: '.'
-          format: 'HTML'
-          out: 'reports'
-          args: >
-            --failOnCVSS 7
-            --enableRetired
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+        run: ./gradlew dependencyCheckAnalyze
       - name: Upload Test results
         uses: actions/upload-artifact@master
+        if: always()
         with:
            name: Dependency-Check Report
-           path: reports/dependency-check-report.html
+           path: build/reports/dependency-check-report.html

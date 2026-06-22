@@ -3,6 +3,7 @@ plugins {
     id 'com.diffplug.spotless' version "8.4.0"
     id 'jacoco'
     id 'pmd'
+    id 'org.owasp.dependencycheck' version '12.2.2'
 }
 
 group = 'org.example'
@@ -13,9 +14,24 @@ repositories {
 }
 
 dependencies {
+    // TEST: bewusst verwundbare Dependency (Log4Shell, CVE-2021-44228, CVSS 10.0),
+    // um den Dependency-Check zu verifizieren. NACH DEM TEST WIEDER ENTFERNEN.
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
+
     testImplementation platform('org.junit:junit-bom:6.0.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+// ./gradlew dependencyCheckAnalyze
+def nvdKey = System.getenv('NVD_API_KEY')
+dependencyCheck {
+    failBuildOnCVSS = 7
+    if (nvdKey) {
+        nvd {
+            apiKey = nvdKey
+        }
+    }
 }
 
 test {

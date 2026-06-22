@@ -28,3 +28,4 @@ jobs:
     uses: ./.github/workflows/security_scan.yml
     permissions:
       contents: read
+    secrets: inherit
