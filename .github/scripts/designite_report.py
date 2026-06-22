@@ -143,10 +143,10 @@ def main(out_dir):
     # --- Exit-Status ---
     if failed:
         for name, count, limit in failed:
-            print(f"::error::Quality Gate '{name}': {count} Smells > erlaubtes Maximum {limit}")
+            print(f"::error::Lokales Quality Gate '{name}': {count} Smells > erlaubtes Maximum {limit}")
         return 1
     if gates:
-        print(f"::notice::Quality Gate bestanden ({len(gates)} Grenze(n) geprueft).")
+        print(f"::notice::Lokales Quality Gate bestanden ({len(gates)} Grenze(n) geprueft).")
     return 0
 
 
