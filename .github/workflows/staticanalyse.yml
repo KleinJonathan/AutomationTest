@@ -17,8 +17,8 @@ jobs:
     uses: ./.github/workflows/reusable_designite_java.yml
     permissions:
       contents: read
-    with:
-      max_test: 0
+    #with:
+    #  max_test: 0
   check_spell:
     uses: ./.github/workflows/reusable_typos.yml
     permissions:
