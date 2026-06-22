@@ -5,7 +5,7 @@ on:
 
 jobs:
   analyze:
-    name: Analyze
+    name: CodeQL Analysis
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -43,3 +43,22 @@ jobs:
       with:
         name: codeql-report
         path: report
+    
+    - name: Print CodeQL Report
+      if: always()
+      run: |
+        sarif=$(find report -name '*.sarif' | head -1)
+        count=$(jq '[.runs[].results[]] | length' "$sarif")
+        {
+          echo "## 🔎 CodeQL-Ergebnis"
+          if [ "$count" -eq 0 ]; then
+            echo "✅ Keine Probleme gefunden."
+          else
+            echo "⚠️ **$count Fund(e)**"
+            echo ""
+            echo "| Regel | Datei | Zeile | Beschreibung |"
+            echo "|-------|-------|-------|--------------|"
+            jq -r '.runs[].results[]
+              | "| `\(.ruleId)` | \(.locations[0].physicalLocation.artifactLocation.uri | split("/") | last) | \(.locations[0].physicalLocation.region.startLine) | \(.message.text) |"' "$sarif"
+          fi
+        } >> "$GITHUB_STEP_SUMMARY"
