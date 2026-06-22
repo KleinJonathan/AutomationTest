@@ -39,6 +39,8 @@ on:
         required: false
       API_KEY:
         required: false
+      D_KEY:
+        required: false
 
 
 jobs:
@@ -57,6 +59,12 @@ jobs:
       - name: Download DesigniteJava
         run: wget -q "https://www.designite-tools.com/assets/DesigniteJava.jar"
 
+      - name: Create Designite license config
+        env:
+          D_KEY: ${{ secrets.D_KEY }}
+        run: printf 'LIC_KEY:%s\n' "$D_KEY" > .config
+
+      # -i analysiert den GESAMTEN Quellordner (nicht den Commit-Diff wie -ci).
       - name: Analyze full source with DesigniteJava
         run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE" -o build/reports/designite-report
 
