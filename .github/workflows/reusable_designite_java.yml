@@ -2,6 +2,11 @@ name: DesigniteJava code quality
 
 on:
   workflow_call:
+    secrets:
+        PAT:
+          required: true
+        D_KEY:
+         required: false
     # Alle Grenzen sind optional. -1 (Default) = wird nicht geprueft.
     inputs:
       max_smells:
