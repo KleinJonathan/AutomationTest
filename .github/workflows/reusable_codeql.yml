@@ -25,6 +25,8 @@ jobs:
       uses: github/codeql-action/init@v4
       with:
         languages: java
+        config: |
+          threat-models: local
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v4
