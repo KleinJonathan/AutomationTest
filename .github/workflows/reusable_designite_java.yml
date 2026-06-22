@@ -61,7 +61,7 @@ jobs:
         run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE" -o build/reports/designite-report
 
       # Rendern des Reports für den Browser
-      - name: Report & Quality Gate
+      - name: Report & Local Quality Gate
         if: always()
         env:
           MAX_SMELLS: ${{ inputs.max_smells }}
@@ -80,6 +80,7 @@ jobs:
           retention-days: 7
 
       - name: Store analysis results on DCode platform, if configured. Also, check whether the code passes the configured quality gate
+        if: always()
         shell: bash
         run: |
           if [ -n "${{ secrets.API_KEY }}" ]; then
