@@ -3,6 +3,37 @@ name: DesigniteJava code quality
 on:
   workflow_call:
     # Alle Grenzen sind optional. -1 (Default) = wird nicht geprueft.
+    inputs:
+      max_smells:
+        description: "Grenze fuer die Gesamtzahl aller Smells."
+        type: number
+        default: -1
+        required: false
+      max_architecture:
+        description: "Grenze fuer Architecture Smells."
+        type: number
+        default: -1
+        required: false
+      max_design:
+        description: "Grenze fuer Design Smells."
+        type: number
+        default: -1
+        required: false
+      max_implementation:
+        description: "Grenze fuer Implementation Smells."
+        type: number
+        default: -1
+        required: false
+      max_testability:
+        description: "Grenze fuer Testability Smells."
+        type: number
+        default: -1
+        required: false
+      max_test:
+        description: "Grenze fuer Test Smells."
+        type: number
+        default: -1
+        required: false
     secrets:
       D_PROJECT_ID:
         required: false
@@ -25,8 +56,29 @@ jobs:
           java-version: '25'
       - name: Download DesigniteJava
         run: wget -q "https://www.designite-tools.com/assets/DesigniteJava.jar"
+
       - name: Analyze full source with DesigniteJava
         run: java -jar DesigniteJava.jar -i "$GITHUB_WORKSPACE" -o build/reports/designite-report
+
+      # Rendern des Reports für den Browser
+      - name: Report & Quality Gate
+        if: always()
+        env:
+          MAX_SMELLS: ${{ inputs.max_smells }}
+          MAX_ARCHITECTURE: ${{ inputs.max_architecture }}
+          MAX_DESIGN: ${{ inputs.max_design }}
+          MAX_IMPLEMENTATION: ${{ inputs.max_implementation }}
+          MAX_TESTABILITY: ${{ inputs.max_testability }}
+          MAX_TEST: ${{ inputs.max_test }}
+        run: python3 .github/scripts/designite_report.py build/reports/designite-report
+      - name: Upload Designite Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: designite-report
+          path: build/reports/designite-report
+          retention-days: 7
+
       - name: Store analysis results on DCode platform, if configured. Also, check whether the code passes the configured quality gate
         shell: bash
         run: |

@@ -18,8 +18,8 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    #with:
-    #  max_test: 0
+    with:
+     max_test: 0
   check_spell:
     uses: ./.github/workflows/reusable_typos.yml
     permissions:
