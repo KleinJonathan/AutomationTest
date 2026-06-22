@@ -13,3 +13,14 @@ jobs:
     uses: ./.github/workflows/reusable_pmd.yml
     permissions:
       contents: read
+  call-designite:
+    uses: ./.github/workflows/reusable_designite_java.yml
+    permissions:
+      contents: read
+    secrets: inherit
+    with:
+     max_test: 10
+  check_spell:
+    uses: ./.github/workflows/reusable_typos.yml
+    permissions:
+      contents: read
