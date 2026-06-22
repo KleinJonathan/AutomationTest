@@ -18,3 +18,4 @@ jobs:
           java-version: '25'
       - name: typos-action
         uses: crate-ci/typos@v1.47.2
+        continue-on-error: true

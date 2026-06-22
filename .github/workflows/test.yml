@@ -32,6 +32,7 @@ jobs:
           retention-days: 7
 
       # https://github.com/marketplace/actions
+      # https://github.com/marketplace/actions/jacoco-report
       - name: Add coverage to PR
         uses: madrapps/jacoco-report@v1.8.0
         with:
