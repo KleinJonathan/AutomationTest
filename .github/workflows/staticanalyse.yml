@@ -24,3 +24,9 @@ jobs:
     uses: ./.github/workflows/reusable_typos.yml
     permissions:
       contents: read
+  check_codeql:
+    uses: ./.github/workflows/reusable_codeql.yml
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
