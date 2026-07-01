@@ -2,7 +2,7 @@ name: DesigniteJava code quality
 
 on:
   workflow_call:
-    # Alle Grenzen sind optional. -1 (Default) = wird nicht geprueft.
+    # -1 (Default) = wird nicht geprueft.
     inputs:
       max_smells:
         description: "Grenze fuer die Gesamtzahl aller Smells."
