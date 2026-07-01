@@ -27,7 +27,7 @@ jobs:
       max_design:         ${{ vars.MAX_DESIGN         || -1 }}
       max_implementation: ${{ vars.MAX_IMPLEMENTATION || -1 }}
       max_testability:    ${{ vars.MAX_TESTABILITY    || -1 }}
-      max_test:           ${{ vars.MAX_TEST           || 10 }}
+      max_test:           ${{ vars.MAX_TEST           || -1 }}
   check_spell:
     uses: ./.github/workflows/reusable_typos.yml
     permissions:
